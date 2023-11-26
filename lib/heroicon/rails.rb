@@ -3,7 +3,7 @@
 require_relative "rails/version"
 require_relative "heroicon/railtie" if defined?(Rails)
 require "nokogiri"
-require "heroicon/heroicon_helper"
+require "heroicon/rails/heroicon_helper"
 
 module Heroicon
   module Rails

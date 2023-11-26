@@ -6,8 +6,8 @@ module HeroiconHelper
   def heroicon(name, type: "solid", **options)
     css_classes = options.delete(:class) || ""
 
-    gem_root = Gem::Specification.find_by_name("heroicon").gem_dir
-    file_path = File.join(gem_root, "lib", "heroicon", "assets", "heroicons", type, "#{name}.svg")
+    gem_root = Gem::Specification.find_by_name("heroicon-rails").gem_dir
+    file_path = File.join(gem_root, "lib", "heroicon", "rails", "assets", "heroicons", type, "#{name}.svg")
     svg_content = File.read(file_path)
     doc = Nokogiri::HTML::DocumentFragment.parse(svg_content)
     svg = doc.at_css("svg")
