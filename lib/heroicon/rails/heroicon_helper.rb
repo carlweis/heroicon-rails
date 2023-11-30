@@ -15,6 +15,14 @@ module HeroiconHelper
     css_classes = "#{default_css} #{css_classes}".strip
     svg[:class] = css_classes unless css_classes.empty?
 
+    # Set accessibility attributes
+    svg[:role] = "img"
+    svg["aria-labelledby"] = "#{name}-icon"
+    title = Nokogiri::XML::Node.new("title", doc)
+    title.content = name.humanize
+    title[:id] = "#{name}-icon"
+    svg.prepend_child(title)
+
     doc.to_html.html_safe
   rescue StandardError
     "heroicon '#{name}' not found"
