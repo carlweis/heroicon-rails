@@ -3,28 +3,39 @@ require 'active_support/core_ext/string/output_safety'
 module HeroiconHelper
   HEROICONS_PATH = File.expand_path("assets/heroicons", __dir__)
 
+  # Returns an SVG icon from the Heroicons library with customizable dimensions.
+  # @param name [String] the name of the icon
+  # @param type [String] the style of the icon (default: "solid")
+  # @param options [Hash] additional options including custom CSS classes
+  # @return [String] HTML safe string with the SVG content or error message
   def heroicon(name, type: "solid", **options)
-    css_classes = options.delete(:class) || ""
-
+    custom_class = options.delete(:class) || ""
     gem_root = Gem::Specification.find_by_name("heroicon-rails").gem_dir
-    file_path = File.join(gem_root, "lib", "heroicon", "rails", "assets", "heroicons", type, "#{name}.svg")
-    svg_content = File.read(file_path)
-    doc = Nokogiri::HTML::DocumentFragment.parse(svg_content)
-    svg = doc.at_css("svg")
-    default_css = type == "mini" ? "w-5 h-5" : "w-6 h-6"
-    css_classes = "#{default_css} #{css_classes}".strip
+    icon_path = File.join(gem_root, "lib", "heroicon", "rails", "assets", "heroicons", type, "#{name}.svg")
+    icon_content = File.read(icon_path)
+    icon_doc = Nokogiri::HTML::DocumentFragment.parse(icon_content)
+    svg = icon_doc.at_css("svg")
+
+    # Identify custom width and height classes
+    custom_width_class = custom_class[/\bw-\d+/]
+    custom_height_class = custom_class[/\bh-\d+/]
+
+    # Define default classes, replace with custom if present
+    default_width = custom_width_class ? '' : (type == "mini" ? "w-5" : "w-6")
+    default_height = custom_height_class ? '' : (type == "mini" ? "h-5" : "h-6")
+    css_classes = "#{default_width} #{default_height} #{custom_class}".strip
     svg[:class] = css_classes unless css_classes.empty?
 
-    # Set accessibility attributes
+    # Enhance accessibility
     svg[:role] = "img"
     svg["aria-labelledby"] = "#{name}-icon"
-    title = Nokogiri::XML::Node.new("title", doc)
-    title.content = name.humanize
-    title[:id] = "#{name}-icon"
-    svg.prepend_child(title)
+    title_element = Nokogiri::XML::Node.new("title", icon_doc)
+    title_element.content = name.humanize
+    title_element[:id] = "#{name}-icon"
+    svg.prepend_child(title_element)
 
-    doc.to_html.html_safe
-  rescue StandardError
-    "heroicon '#{name}' not found"
+    icon_doc.to_html.html_safe
+  rescue StandardError => e
+    "Icon '#{name}' not found. Error: #{e.message}"
   end
 end
