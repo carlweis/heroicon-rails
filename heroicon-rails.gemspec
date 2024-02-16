@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["carl@carlweis.com"]
 
   spec.summary = "A Ruby gem providing a helper for easily embedding Heroicons SVG icons in Rails applications."
-  spec.description = "This gem simplifies the process of using Heroicons, a popular SVG icon library, in Ruby on Rails applications. It offers a convenient helper method that allows developers to easily embed any Heroicon with customizable types (solid, outline, or mini) and additional CSS classes. The gem aims to enhance the visual appeal and user interface design of Rails applications with minimal effort."
+  spec.description = "This gem simplifies the process of using Heroicons, a popular SVG icon library, in Ruby on Rails applications. It offers a convenient helper method that allows developers to easily embed any Heroicon with customizable types (solid, outline, or mini) and additional CSS classes. The gem aims to enhance the visual appeal and user interface design of Rails applications with minimal effort." # rubocop:disable Layout/LineLength
   spec.homepage = "https://github.com/carlweis/heroicon-rails"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
   spec.add_runtime_dependency "activesupport", ">= 5.2.7"
-  spec.add_dependency "nokogiri", ">= 1.15.5"
+  spec.add_dependency "nokogiri", ">= 1.14.3"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
