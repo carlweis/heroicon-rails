@@ -10,8 +10,10 @@ module HeroiconHelper
   # @return [String] HTML safe string with the SVG content or error message
   def heroicon(name, type: "solid", **options)
     custom_class = options.delete(:class) || ""
+    # Handle style attribute separately to avoid unintended deletions
+    style_attribute = options.delete(:style)
 
-     # Remove and separately handle data- attributes to avoid unintended deletions
+    # Handle data- attributes, filtering out anything that doesn't start with 'data-'
     data_attributes = options.select { |key, _| key.to_s.start_with?('data-') }
     options.except!(*data_attributes.keys)
 
@@ -21,15 +23,16 @@ module HeroiconHelper
     icon_doc = Nokogiri::HTML::DocumentFragment.parse(icon_content)
     svg = icon_doc.at_css("svg")
 
-    # Identify custom width and height classes
+    # Apply custom classes
     custom_width_class = custom_class[/\bw-\d+/]
     custom_height_class = custom_class[/\bh-\d+/]
-
-    # Define default classes, replace with custom if present
     default_width = custom_width_class ? '' : (type == "mini" ? "w-5" : "w-6")
     default_height = custom_height_class ? '' : (type == "mini" ? "h-5" : "h-6")
     css_classes = "#{default_width} #{default_height} #{custom_class}".strip
     svg[:class] = css_classes unless css_classes.empty?
+
+    # Apply style attribute if present
+    svg[:style] = style_attribute if style_attribute
 
     # Enhance accessibility
     svg[:role] = "img"
