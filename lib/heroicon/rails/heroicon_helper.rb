@@ -10,6 +10,11 @@ module HeroiconHelper
   # @return [String] HTML safe string with the SVG content or error message
   def heroicon(name, type: "solid", **options)
     custom_class = options.delete(:class) || ""
+
+     # Remove and separately handle data- attributes to avoid unintended deletions
+    data_attributes = options.select { |key, _| key.to_s.start_with?('data-') }
+    options.except!(*data_attributes.keys)
+
     gem_root = Gem::Specification.find_by_name("heroicon-rails").gem_dir
     icon_path = File.join(gem_root, "lib", "heroicon", "rails", "assets", "heroicons", type, "#{name}.svg")
     icon_content = File.read(icon_path)
@@ -33,6 +38,11 @@ module HeroiconHelper
     title_element.content = name.humanize
     title_element[:id] = "#{name}-icon"
     svg.prepend_child(title_element)
+
+    # Add custom data- attributes
+    data_attributes.each do |key, value|
+      svg[key] = value
+    end
 
     icon_doc.to_html.html_safe
   rescue StandardError => e
