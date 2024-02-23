@@ -16,9 +16,6 @@ module HeroiconHelper
     # Handle class attribute
     custom_class = options.delete(:class) || ""
 
-    # Handle title attribute
-    title_attribute = options.delete(:title)
-
     # Handle style attribute
     style_attribute = options.delete(:style)
 
@@ -43,9 +40,6 @@ module HeroiconHelper
 
     # Apply style attribute if present
     svg[:style] = style_attribute if style_attribute
-
-    # Apply title attribute if present
-    svg[:title] = title_attribute if title_attribute
 
     # Enhance accessibility
     svg[:role] = "img"
