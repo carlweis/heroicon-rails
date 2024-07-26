@@ -58,7 +58,7 @@ module HeroiconHelper
     end
 
     icon_doc.to_html.html_safe
-  rescue StandardError
+  rescue StandardError => e
     "Icon #{name} not found. Error: #{e.message}"
   end
 end
