@@ -19,6 +19,9 @@ module HeroiconHelper
     # Handle style attribute
     style_attribute = options.delete(:style)
 
+    # Handle title attribute
+    title_attribute = options.delete(:title)
+
     # Handle data- attributes, filtering out anything that doesn"t start with "data-"
     data_attributes = options.select { |key, _| key.to_s.start_with?("data-") }
     options.except!(*data_attributes.keys)
@@ -45,7 +48,7 @@ module HeroiconHelper
     svg[:role] = "img"
     svg["aria-labelledby"] = "#{name}-icon"
     title_element = Nokogiri::XML::Node.new("title", icon_doc)
-    title_element.content = name.humanize
+    title_element.content = title_attribute || name.humanize
     title_element[:id] = "#{name}-icon"
     svg.prepend_child(title_element)
 
